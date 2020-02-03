@@ -8,8 +8,6 @@ function PostEditorPage() {
 
     return (
         <Container>
-            <h1>post editor</h1>
-
             <PostEditor post={post} />
         </Container>
     );
