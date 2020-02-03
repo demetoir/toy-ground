@@ -1,16 +1,18 @@
 import PostEditor from '../component/Post/PostEditor.js';
 import React from 'react';
-import {Container, Row} from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
+import { useGlobalContext } from '../context/GlobalContext.js';
 
-function PostEditorPage(props) {
-	const {post = {}} = props;
-	return (
-		<Container>
-			<Row>
-				<PostEditor post={post}/>
-			</Row>
-		</Container>
-	);
+function PostEditorPage() {
+    const { post } = useGlobalContext();
+
+    return (
+        <Container>
+            <h1>post editor</h1>
+
+            <PostEditor post={post} />
+        </Container>
+    );
 }
 
 export default PostEditorPage;
