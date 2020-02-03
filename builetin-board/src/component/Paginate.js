@@ -6,6 +6,8 @@ function Paginate({
     onPageChange,
     marginPagesDisplayed = 1,
     pageRangeDisplayed = 7,
+    forcePage,
+    initialPage
 }) {
     return (
         <ReactPaginate
@@ -13,15 +15,17 @@ function Paginate({
             marginPagesDisplayed={marginPagesDisplayed}
             pageRangeDisplayed={pageRangeDisplayed}
             onPageChange={onPageChange}
+            forcePage={forcePage}
+            initialPage={initialPage}
             containerClassName={'pagination'}
             subContainerClassName={'pagination'}
-            previousLabel={'previous'}
+            previousLabel={'<'}
             previousClassName={'page-item'}
             previousLinkClassName={'page-link'}
             breakLabel={'...'}
             breakClassName={'page-item'}
             breakLinkClassName={'page-link'}
-            nextLabel={'next'}
+            nextLabel={'>'}
             nextClassName={'page-item'}
             nextLinkClassName={'page-link'}
             pageClassName={'page-item'}
