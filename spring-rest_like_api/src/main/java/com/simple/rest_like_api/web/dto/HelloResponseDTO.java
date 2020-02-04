@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 @RequiredArgsConstructor
 public class HelloResponseDTO {
-    private final String name;
-    private final int number;
-    private boolean isDone;
+  private final String name;
+  private final int number;
+  private boolean isDone;
 }

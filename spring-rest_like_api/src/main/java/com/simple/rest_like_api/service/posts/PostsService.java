@@ -2,12 +2,15 @@ package com.simple.rest_like_api.service.posts;
 
 import com.simple.rest_like_api.domain.post.Posts;
 import com.simple.rest_like_api.domain.post.PostsRepository;
+import com.simple.rest_like_api.web.dto.post.PostsListResponseDto;
 import com.simple.rest_like_api.web.dto.post.PostsSaveRequestDto;
 import com.simple.rest_like_api.web.dto.post.PostsResponseDto;
 import com.simple.rest_like_api.web.dto.post.PostsUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Service
@@ -39,5 +42,23 @@ public class PostsService {
             .orElseThrow(() -> new IllegalArgumentException(" 사용자 없어 id=" + id));
 
     return new PostsResponseDto(entity);
+  }
+
+  public PostsListResponseDto findAll() {
+    List<Posts> postsList = postsRepository.findAll();
+    return new PostsListResponseDto(postsList);
+  }
+
+  @Transactional
+  public Long deleteById(Long id) {
+
+    Posts posts =
+        postsRepository
+            .findById(id)
+            .orElseThrow(() -> new IllegalArgumentException(" 사용자 없어 id=" + id));
+
+    postsRepository.delete(posts);
+
+    return id;
   }
 }

@@ -6,15 +6,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class HelloResponseDTOTest {
 
-    @Test
-    public void ableToConstruct() {
-        String name = "hello";
-        int number = 1;
+  @Test
+  public void ableToConstruct() {
+    String name = "hello";
+    int number = 1;
 
-        HelloResponseDTO dto = new HelloResponseDTO(name, number);
+    HelloResponseDTO dto = new HelloResponseDTO(name, number);
 
-        assertThat(dto.getName()).isEqualTo(name);
-        assertThat(dto.getNumber()).isEqualTo(number);
-    }
-
+    assertThat(dto.getName()).isEqualTo(name);
+    assertThat(dto.getNumber()).isEqualTo(number);
+  }
 }
