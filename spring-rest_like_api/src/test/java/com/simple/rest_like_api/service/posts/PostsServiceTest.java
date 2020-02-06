@@ -2,13 +2,18 @@ package com.simple.rest_like_api.service.posts;
 
 import com.simple.rest_like_api.domain.post.Posts;
 import com.simple.rest_like_api.domain.post.PostsRepository;
+import com.simple.rest_like_api.web.dto.post.PostsListResponseDto;
 import com.simple.rest_like_api.web.dto.post.PostsResponseDto;
 import com.simple.rest_like_api.web.dto.post.PostsSaveRequestDto;
+import com.simple.rest_like_api.web.dto.post.PostsUpdateRequestDto;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -92,20 +97,87 @@ class PostsServiceTest {
   }
 
   @Test
-  void findById() {
-    // todo
-    assert false;
+  void able_to_update() {
+    // given
+    String title = "1234";
+    String author = "author";
+    String content = "content";
+    Long updateId = 431L;
+
+    PostsUpdateRequestDto updateRequestDto =
+        PostsUpdateRequestDto.builder().content(content).title(title).build();
+
+    Posts post = Posts.builder().title("old").author(author).content("old").build();
+    Posts spyPost = spy(post);
+    when(spyPost.getId()).thenReturn(updateId);
+
+    PostsRepository repo = Mockito.mock(PostsRepository.class);
+    when(repo.findById(any(Long.class))).thenReturn(Optional.of(spyPost));
+
+    PostsService postsService = new PostsService(repo);
+
+    // when
+    Long newId = postsService.update(updateId, updateRequestDto);
+
+    // than
+    assertThat(newId).isEqualTo(updateId);
+    assertThat(spyPost.getTitle()).isEqualTo(title);
+    assertThat(spyPost.getContent()).isEqualTo(content);
+    assertThat(spyPost.getAuthor()).isEqualTo(author);
   }
 
   @Test
-  void findAll() {
-    // todo
-    assert false;
+  void able_to_deleteById() {
+    // given
+    String title = "1234";
+    String author = "author";
+    String content = "content";
+    Long targetId = 431L;
+
+    Posts post = Posts.builder().title(title).author(author).content(content).build();
+    Posts spyPost = spy(post);
+    when(spyPost.getId()).thenReturn(targetId);
+
+    PostsRepository repo = Mockito.mock(PostsRepository.class);
+    when(repo.findById(any(Long.class))).thenReturn(Optional.of(spyPost));
+
+    PostsService postsService = new PostsService(repo);
+
+    // when
+    Long deletedId = postsService.deleteById(targetId);
+
+    // than
+    assertThat(deletedId).isEqualTo(targetId);
   }
 
   @Test
-  void deleteById() {
-    // todo
-    assert false;
+  void able_to_findAll() {
+    // given
+    String title = "1234";
+    String author = "author";
+    String content = "content";
+
+    Posts post = Posts.builder().title(title).author(author).content(content).build();
+    List<Posts> postsList = Arrays.asList(post, post);
+    PostsListResponseDto expectedDto = new PostsListResponseDto(postsList);
+
+    PostsRepository repo = Mockito.mock(PostsRepository.class);
+    when(repo.findAll()).thenReturn(postsList);
+
+    PostsService postsService = new PostsService(repo);
+
+    // when
+    PostsListResponseDto realDto = postsService.findAll();
+
+    // than
+    // 객체 비교가 어쨰서 안되는가????
+    // 일단 string 비교로 했지만
+    // Objects.deepEqual dksxhdgka
+    System.out.println(realDto);
+    System.out.println(expectedDto);
+    System.out.println(Objects.deepEquals(expectedDto, realDto));
+    System.out.println(expectedDto.equals(realDto));
+    System.out.println(expectedDto == realDto);
+    assertThat(realDto.toString()).isEqualTo(expectedDto.toString());
   }
 }
