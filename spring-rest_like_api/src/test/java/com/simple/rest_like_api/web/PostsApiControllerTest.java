@@ -1,4 +1,4 @@
-package com.simple.rest_like_api.service.posts;
+package com.simple.rest_like_api.web;
 
 import com.simple.rest_like_api.domain.post.Posts;
 import com.simple.rest_like_api.domain.post.PostsRepository;
