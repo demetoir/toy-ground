@@ -1,6 +1,5 @@
 package com.simple.rest_like_api.web;
 
-import com.simple.rest_like_api.domain.post.Posts;
 import com.simple.rest_like_api.service.posts.PostsService;
 import com.simple.rest_like_api.web.dto.post.PostsListResponseDto;
 import com.simple.rest_like_api.web.dto.post.PostsResponseDto;
@@ -8,8 +7,6 @@ import com.simple.rest_like_api.web.dto.post.PostsSaveRequestDto;
 import com.simple.rest_like_api.web.dto.post.PostsUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
