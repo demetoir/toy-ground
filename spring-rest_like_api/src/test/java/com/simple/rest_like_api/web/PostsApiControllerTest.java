@@ -79,6 +79,7 @@ class PostsApiControllerTest {
             .findById(updatedId)
             .orElseThrow(() -> new Exception("업데이트 한 row 가 존재하지 않음"));
 
+    assertThat(posts.getId()).isEqualTo(updatedId);
     assertThat(posts.getTitle()).isEqualTo(expectTitle);
     assertThat(posts.getContent()).isEqualTo(expectContent);
   }
