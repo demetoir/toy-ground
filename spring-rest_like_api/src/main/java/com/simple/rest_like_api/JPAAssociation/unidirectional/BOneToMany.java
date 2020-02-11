@@ -1,4 +1,4 @@
-package com.simple.rest_like_api.JPAExample.ManyToOne.Unidiretion;
+package com.simple.rest_like_api.JPAAssociation.unidirectional;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @ToString
 @Entity
-public class B {
+public class BOneToMany {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;

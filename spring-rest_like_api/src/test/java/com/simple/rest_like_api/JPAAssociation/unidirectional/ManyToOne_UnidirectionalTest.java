@@ -1,19 +1,25 @@
-package com.simple.rest_like_api.JPAExample.ManyToOne.Unidiretion;
+package com.simple.rest_like_api.JPAAssociation.unidirectional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
-class ManyToOne_UnidirectionTest {
-  @Autowired ARepo aRepo;
+// JPA 테스트용 빈만 주입하도록 하면
+// SprintBootTest 보다  빠르게 테스트 가능
+@DataJpaTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+class ManyToOne_UnidirectionalTest {
+  @Autowired
+  AManyToOneRepo aRepo;
 
-  @Autowired BRepo bRepo;
+  @Autowired
+  BManyToOneRepo bRepo;
 
   private final String bData = "<B data>";
   private final String aData = "<A data>";
@@ -25,14 +31,14 @@ class ManyToOne_UnidirectionTest {
   }
 
   @Test
-  public void able_to_() {
+  public void able_to_create() {
 
-    B b = new B();
+    BManyToOne b = new BManyToOne();
     b.setData(bData);
 
     bRepo.save(b);
 
-    A a = new A();
+    AManyToOne a = new AManyToOne();
     a.setData(aData);
     a.setB(b);
 
