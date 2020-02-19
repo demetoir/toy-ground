@@ -30,3 +30,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### exclude oauth2.0 properties
+application-oauth.properties
