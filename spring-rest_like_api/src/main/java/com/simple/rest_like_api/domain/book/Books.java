@@ -1,4 +1,4 @@
-package com.simple.rest_like_api.domain.user;
+package com.simple.rest_like_api.domain.book;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor
 @Entity
-public class Users {
+public class Books {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
@@ -20,7 +20,7 @@ public class Users {
   private String name;
 
   @Builder
-  public Users(String name) {
+  public Books(String name) {
     this.name = name;
   }
 

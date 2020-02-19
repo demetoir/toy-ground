@@ -1,12 +1,12 @@
 package com.simple.rest_like_api.web;
 
-import com.simple.rest_like_api.domain.user.Users;
-import com.simple.rest_like_api.domain.user.UsersRepository;
-import com.simple.rest_like_api.service.users.UsersService;
-import com.simple.rest_like_api.web.dto.user.UsersListResponseDto;
-import com.simple.rest_like_api.web.dto.user.UsersResponseDto;
-import com.simple.rest_like_api.web.dto.user.UsersSaveRequestDto;
-import com.simple.rest_like_api.web.dto.user.UsersUpdateRequestDto;
+import com.simple.rest_like_api.domain.book.Books;
+import com.simple.rest_like_api.domain.book.BooksRepository;
+import com.simple.rest_like_api.service.books.BooksService;
+import com.simple.rest_like_api.web.dto.book.BooksListResponseDto;
+import com.simple.rest_like_api.web.dto.book.BooksResponseDto;
+import com.simple.rest_like_api.web.dto.book.BooksSaveRequestDto;
+import com.simple.rest_like_api.web.dto.book.BooksUpdateRequestDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -25,20 +25,20 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class UsersApiControllerTest {
+class BooksApiControllerTest {
   @LocalServerPort private int port;
 
   @Autowired private TestRestTemplate restTemplate;
 
-  @Autowired private UsersRepository usersRepository;
+  @Autowired private BooksRepository booksRepository;
 
-  @Autowired private UsersService usersService;
+  @Autowired private BooksService booksService;
 
   private String urlHead;
 
   @BeforeEach
   public void beforeEach() {
-    urlHead = "http://localhost:" + port + "/api/v1/users";
+    urlHead = "http://localhost:" + port + "/api/v1/books";
   }
 
   @Test
@@ -46,8 +46,8 @@ class UsersApiControllerTest {
     assertThat(urlHead).isNotNull();
     assertThat(port).isNotNull();
     assertThat(restTemplate).isNotNull();
-    assertThat(usersRepository).isNotNull();
-    assertThat(usersService).isNotNull();
+    assertThat(booksRepository).isNotNull();
+    assertThat(booksService).isNotNull();
   }
 
   @Test
@@ -55,7 +55,7 @@ class UsersApiControllerTest {
     // given
     String url = urlHead;
     String name = "name";
-    UsersSaveRequestDto dto = UsersSaveRequestDto.builder().name(name).build();
+    BooksSaveRequestDto dto = BooksSaveRequestDto.builder().name(name).build();
 
     // when
     ResponseEntity<Long> responseEntity = restTemplate.postForEntity(url, dto, Long.class);
@@ -67,14 +67,14 @@ class UsersApiControllerTest {
     assertThat(resultId).isGreaterThan(0L);
     assertThat(resultId).isNotNull();
 
-    Users users =
-        usersRepository
+    Books books =
+        booksRepository
             .findById(resultId)
             .orElseThrow(() -> new Exception("able to find saved user"));
 
-    assertThat(users).isNotNull();
-    assertThat(users.getId()).isEqualTo(resultId);
-    assertThat(users.getName()).isEqualTo(name);
+    assertThat(books).isNotNull();
+    assertThat(books.getId()).isEqualTo(resultId);
+    assertThat(books.getName()).isEqualTo(name);
   }
 
   @Test
@@ -82,19 +82,19 @@ class UsersApiControllerTest {
     // given
     // setup old value
     String oldName = "old";
-    UsersSaveRequestDto oldDto = UsersSaveRequestDto.builder().name(oldName).build();
-    Users oldUsers = usersRepository.save(oldDto.toEntity());
-    Long targetId = oldUsers.getId();
+    BooksSaveRequestDto oldDto = BooksSaveRequestDto.builder().name(oldName).build();
+    Books oldBooks = booksRepository.save(oldDto.toEntity());
+    Long targetId = oldBooks.getId();
 
     // setup new value
     String url = urlHead + "/" + targetId;
     String newName = "new";
-    UsersUpdateRequestDto newDto = UsersUpdateRequestDto.builder().name(newName).build();
+    BooksUpdateRequestDto newDto = BooksUpdateRequestDto.builder().name(newName).build();
 
     // when
     // testresttamplate 에서는 put 메서드에는 리턴이 없음
     // 그래서 이렇게 HttpEntity로 wrapping 한 객체를 넘겨주는 방식으로 해야함
-    HttpEntity<UsersUpdateRequestDto> httpEntity = new HttpEntity<>(newDto);
+    HttpEntity<BooksUpdateRequestDto> httpEntity = new HttpEntity<>(newDto);
     ResponseEntity<Long> responseEntity =
         restTemplate.exchange(url, HttpMethod.PUT, httpEntity, Long.class);
 
@@ -106,13 +106,13 @@ class UsersApiControllerTest {
     assertThat(resultId).isGreaterThan(0L);
     assertThat(resultId).isEqualTo(targetId);
 
-    Users users =
-        usersRepository
+    Books books =
+        booksRepository
             .findById(resultId)
             .orElseThrow(() -> new Exception("able to find updated user"));
-    assertThat(users).isNotNull();
-    assertThat(users.getId()).isEqualTo(resultId);
-    assertThat(users.getName()).isEqualTo(newName);
+    assertThat(books).isNotNull();
+    assertThat(books.getId()).isEqualTo(resultId);
+    assertThat(books.getName()).isEqualTo(newName);
   }
 
   @Test
@@ -120,9 +120,9 @@ class UsersApiControllerTest {
     // given
     // setup old value
     String name = "delete";
-    UsersSaveRequestDto oldDto = UsersSaveRequestDto.builder().name(name).build();
-    Users oldUsers = usersRepository.save(oldDto.toEntity());
-    Long targetId = oldUsers.getId();
+    BooksSaveRequestDto oldDto = BooksSaveRequestDto.builder().name(name).build();
+    Books oldBooks = booksRepository.save(oldDto.toEntity());
+    Long targetId = oldBooks.getId();
 
     // setup new value
     String url = urlHead + "/" + targetId;
@@ -143,7 +143,7 @@ class UsersApiControllerTest {
     assertThrows(
         Exception.class,
         () ->
-            usersRepository
+            booksRepository
                 .findById(resultId)
                 .orElseThrow(() -> new Exception("able to find updated user")));
   }
@@ -153,20 +153,20 @@ class UsersApiControllerTest {
     // given
     // setup old value
     String name = "plane";
-    UsersSaveRequestDto oldDto = UsersSaveRequestDto.builder().name(name).build();
-    Users oldUsers = usersRepository.save(oldDto.toEntity());
+    BooksSaveRequestDto oldDto = BooksSaveRequestDto.builder().name(name).build();
+    Books oldBooks = booksRepository.save(oldDto.toEntity());
 
     // setup new value
     String url = urlHead;
 
     // when
-    ResponseEntity<UsersListResponseDto> responseEntity =
-        restTemplate.getForEntity(url, UsersListResponseDto.class);
+    ResponseEntity<BooksListResponseDto> responseEntity =
+        restTemplate.getForEntity(url, BooksListResponseDto.class);
 
     // than
     assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
 
-    UsersListResponseDto dto = responseEntity.getBody();
+    BooksListResponseDto dto = responseEntity.getBody();
     assertThat(dto).isNotNull();
     assertThat(dto.getResponseDtoList()).isNotNull();
     assertThat(dto.getResponseDtoList()).isNotEmpty();
@@ -177,21 +177,21 @@ class UsersApiControllerTest {
     // given
     // setup old value
     String name = "plane";
-    UsersSaveRequestDto oldDto = UsersSaveRequestDto.builder().name(name).build();
-    Users oldUsers = usersRepository.save(oldDto.toEntity());
-    Long targetId = oldUsers.getId();
+    BooksSaveRequestDto oldDto = BooksSaveRequestDto.builder().name(name).build();
+    Books oldBooks = booksRepository.save(oldDto.toEntity());
+    Long targetId = oldBooks.getId();
 
     // setup new value
     String url = urlHead + "/" + targetId;
 
     // when
-    ResponseEntity<UsersResponseDto> responseEntity =
-        restTemplate.getForEntity(url, UsersResponseDto.class);
+    ResponseEntity<BooksResponseDto> responseEntity =
+        restTemplate.getForEntity(url, BooksResponseDto.class);
 
     // than
     assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
 
-    UsersResponseDto dto = responseEntity.getBody();
+    BooksResponseDto dto = responseEntity.getBody();
     assertThat(dto).isNotNull();
     assertThat(dto.getId()).isEqualTo(targetId);
     assertThat(dto.getName()).isEqualTo(name);
@@ -201,15 +201,15 @@ class UsersApiControllerTest {
   public void try_findById_but_not_Exist() {
     // given
     // setup old value
-    usersRepository.deleteAll();
+    booksRepository.deleteAll();
     Long targetId = 1235L;
 
     // setup new value
     String url = urlHead + "/" + targetId;
 
     // when
-    ResponseEntity<UsersResponseDto> responseEntity =
-        restTemplate.getForEntity(url, UsersResponseDto.class);
+    ResponseEntity<BooksResponseDto> responseEntity =
+        restTemplate.getForEntity(url, BooksResponseDto.class);
 
     System.out.println(responseEntity.getStatusCode());
 

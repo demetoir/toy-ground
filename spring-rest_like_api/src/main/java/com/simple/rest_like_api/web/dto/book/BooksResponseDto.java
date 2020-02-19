@@ -1,6 +1,6 @@
-package com.simple.rest_like_api.web.dto.user;
+package com.simple.rest_like_api.web.dto.book;
 
-import com.simple.rest_like_api.domain.user.Users;
+import com.simple.rest_like_api.domain.book.Books;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,11 +8,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UsersResponseDto {
+public class BooksResponseDto {
   private Long id;
   private String name;
 
-  public UsersResponseDto(Users entity) {
+  public BooksResponseDto(Books entity) {
     this.id = entity.getId();
     this.name = entity.getName();
   }

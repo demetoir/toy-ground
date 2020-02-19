@@ -1,4 +1,4 @@
-package com.simple.rest_like_api.web.dto.user;
+package com.simple.rest_like_api.web.dto.book;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -8,11 +8,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UsersUpdateRequestDto {
+public class BooksUpdateRequestDto {
   private String name;
 
   @Builder
-  public UsersUpdateRequestDto(String name) {
+  public BooksUpdateRequestDto(String name) {
     this.name = name;
   }
 }
