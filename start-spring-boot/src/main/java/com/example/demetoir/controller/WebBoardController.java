@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Log
 @Controller
-// @RequestMapping("/boards")
 public class WebBoardController {
 
   private WebBoardRepository repo;
@@ -25,16 +24,20 @@ public class WebBoardController {
   }
 
   @GetMapping("/boards/list")
-  public void list(PageVO vo, Model model) {
+  public void list(PageVO pageVO, Model model) {
 
-    Pageable page = vo.makePageable(0, "bno");
-    Page<WebBoard> result = repo.findAll(repo.makePredicate(null, null), page);
+    Pageable page = pageVO.makePageable(0, "bno");
+    Page<WebBoard> result = repo.findAll(repo.makePredicate(pageVO.getType(), pageVO.getKeyword()), page);
+
 
     log.info("page " + page);
     log.info("result " + result);
 
     log.info("total page number :" + result.getTotalPages());
-    model.addAttribute("result", new PageMaker<>(result));
+
+    PageMaker<WebBoard> resultPage = new PageMaker<>(result);
+    log.info("" + resultPage.getPrevPage());
+    model.addAttribute("result", resultPage);
   }
 
   @GetMapping("/sample")

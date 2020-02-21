@@ -1,8 +1,11 @@
 package com.example.demetoir.vo;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.web.bind.annotation.GetMapping;
 
 public class PageVO {
   private static final int DEFAULT_SIZE = 10;
@@ -10,8 +13,15 @@ public class PageVO {
   private static final int DEFAULT_MAX_SIZE = 50;
 
   private int page;
-
   private int size;
+
+  @Setter
+  @Getter
+  private String keyword;
+
+  @Getter
+  @Setter
+  private String type;
 
   public PageVO() {
     this.page = 1;
