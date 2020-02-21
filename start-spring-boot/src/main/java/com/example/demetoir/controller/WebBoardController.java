@@ -57,15 +57,55 @@ public class WebBoardController {
     return "redirect:/boards/list";
   }
 
-
   @GetMapping("/boards/view")
-  public void view(long bno, @ModelAttribute("pageVO") PageVO pageVO, Model model){
+  public void view(long bno, @ModelAttribute("pageVO") PageVO pageVO, Model model) {
     log.info("bno " + bno);
 
     repo.findById(bno).ifPresent(webBoard -> model.addAttribute("vo", webBoard));
   }
 
- @GetMapping("/sample")
+  @GetMapping("/boards/modify")
+  public void modifyGET(long bno, @ModelAttribute("pageVO") PageVO pageVO, Model model) {
+    log.info("modify bno " + bno);
+
+    repo.findById(bno).ifPresent(webBoard -> model.addAttribute("vo", webBoard));
+  }
+
+  @PostMapping("/boards/modify")
+  public String modifyPost(WebBoard board, PageVO pageVO, RedirectAttributes rttr) {
+    log.info("modify bn " + board.getBno());
+
+    repo.findById(board.getBno())
+        .ifPresent(
+            origin -> {
+              origin.setTitle(board.getTitle());
+              origin.setContent(board.getContent());
+
+              repo.save(origin);
+
+              rttr.addFlashAttribute("msg", "success");
+              rttr.addAttribute("bno", origin.getBno());
+            });
+
+    return "redirect:/boards/view";
+  }
+
+  @PostMapping("/boards/delete")
+  public String delete(long bno, PageVO pageVO, RedirectAttributes rttr) {
+
+    log.info("delete bno " + bno);
+    repo.deleteById(bno);
+
+    rttr.addFlashAttribute("msg", "success");
+    rttr.addAttribute("page", pageVO.getPage());
+    rttr.addAttribute("size", pageVO.getSize());
+    rttr.addAttribute("type", pageVO.getType());
+    rttr.addAttribute("keyword", pageVO.getKeyword());
+
+    return "redirect:/boards/list";
+  }
+
+  @GetMapping("/sample")
   public void list(Model model) {
     model.addAttribute("hello", "hello");
   }
