@@ -57,7 +57,15 @@ public class WebBoardController {
     return "redirect:/boards/list";
   }
 
-  @GetMapping("/sample")
+
+  @GetMapping("/boards/view")
+  public void view(long bno, @ModelAttribute("pageVO") PageVO pageVO, Model model){
+    log.info("bno " + bno);
+
+    repo.findById(bno).ifPresent(webBoard -> model.addAttribute("vo", webBoard));
+  }
+
+ @GetMapping("/sample")
   public void list(Model model) {
     model.addAttribute("hello", "hello");
   }
