@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 // @RequestMapping("/boards")
 @Log
-public class webBoardController {
+public class WebBoardController {
   @GetMapping("/boards/list")
   public void list() {
     log.info("list call");
