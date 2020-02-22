@@ -15,6 +15,11 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+// The job of @Controller is to create a Map of model object and find a view but @RestController
+// simply return the object and object data is directly written into HTTP response as JSON or XML.
+//
+// Read more:
+// https://javarevisited.blogspot.com/2017/08/difference-between-restcontroller-and-controller-annotations-spring-mvc-rest.html#ixzz6Ej4z0rTB
 @Log
 @Controller
 public class WebBoardController {
