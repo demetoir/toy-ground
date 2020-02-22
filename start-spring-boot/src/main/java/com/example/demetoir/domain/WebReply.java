@@ -1,5 +1,6 @@
 package com.example.demetoir.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,30 +10,27 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.List;
 
 @Getter
+@ToString(exclude = "board")
 @Setter
+@Table(name = "tbl_webreplies")
+@EqualsAndHashCode(of = "rno")
 @Entity
-@Table(name = "tbl_webboards")
-@EqualsAndHashCode(of = "bno")
-@ToString
-public class WebBoard {
-
+public class WebReply {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long bno;
+  private Long rno;
 
-  private String title;
+  private String replyText;
 
-  private String writer;
-
-  private String content;
+  private String replyWriter;
 
   @CreationTimestamp private Timestamp regDate;
 
   @UpdateTimestamp private Timestamp updatedDate;
 
-  @OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
-  private List<WebReply> replyList;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JsonIgnore
+  private WebBoard board;
 }
