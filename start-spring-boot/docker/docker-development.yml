@@ -2,7 +2,7 @@ version: "2.0"
 
 services:
   mysql:
-    container_name: mysql
+    container_name: start-spring-boot-mysql
     image: mysql
     ports:
       - 3306:3306

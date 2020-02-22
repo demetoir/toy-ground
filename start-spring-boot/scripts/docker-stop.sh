@@ -1,1 +1,2 @@
-docker-compose -f ../docker/docker-product.yml down
+cd ..
+docker-compose -f docker/docker-development.yml down
