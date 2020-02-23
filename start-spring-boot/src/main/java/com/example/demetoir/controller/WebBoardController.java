@@ -1,7 +1,7 @@
 package com.example.demetoir.controller;
 
 import com.example.demetoir.domain.WebBoard;
-import com.example.demetoir.persistance.WebBoardRepository;
+import com.example.demetoir.persistance.CustomCrudRepository;
 import com.example.demetoir.vo.PageMaker;
 import com.example.demetoir.vo.PageVO;
 import lombok.extern.java.Log;
@@ -24,28 +24,26 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class WebBoardController {
 
-  private WebBoardRepository repo;
+  private CustomCrudRepository repo;
 
   @Autowired
-  public WebBoardController(WebBoardRepository repo) {
+  public WebBoardController(CustomCrudRepository repo) {
     this.repo = repo;
   }
 
   @GetMapping("/boards/list")
-  public void list(PageVO pageVO, Model model) {
-
+  public void list(@ModelAttribute("pageVO") PageVO pageVO, Model model) {
+    log.info("pagevo " +pageVO);
     Pageable page = pageVO.makePageable(0, "bno");
-    Page<WebBoard> result =
-        repo.findAll(repo.makePredicate(pageVO.getType(), pageVO.getKeyword()), page);
-
     log.info("page " + page);
-    log.info("result " + result);
+    log.info("page " + page);
 
+    Page<Object[]> result = repo.getCustomPage(pageVO.getType(), pageVO.getKeyword(), page);
+
+    log.info("result " + result);
     log.info("total page number :" + result.getTotalPages());
 
-    PageMaker<WebBoard> resultPage = new PageMaker<>(result);
-    log.info("" + resultPage.getPrevPage());
-    model.addAttribute("result", resultPage);
+    model.addAttribute("result", new PageMaker<>(result));
   }
 
   @GetMapping("/boards/register")

@@ -22,24 +22,31 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr class="odd gradeX" th:each="board:${result.content}">
-                    <td>[[${board.bno}]]</td>
-                    <td><a th:href='${board.bno}' class='boardLink'>[[${board.title}]]</a></td>
-                    <td>[[${board.writer}]]</td>
-                    <td class="center">[[${#dates.format(board.regDate,'yyyy-MM-dd')}]]
+                <tr class="odd gradeX" th:each="arr:${result.content}">
+                    <td>[[${arr[0]}]]</td>
+                    <td>
+                        <a th:href='${arr[0]}' class='boardLink'>[[${arr[1]}]]</a>
+                        <span class="badge">[[${arr[2]}]]</span>
+                    </td>
+                    <td>[[${arr[3]}]]</td>
+                    <td class="center">[[${#dates.format(arr[4],
+                        'yyyy-MM-dd')}]]
                     </td>
                 </tr>
                 </tbody>
             </table>
 
             <div>
+                <label for='searchType'></label>
                 <select id='searchType'>
                     <option>--</option>
-                    <option value='t' th:selected="${pageVO.type} =='t'" >Title</option>
+                    <option value='t' th:selected="${pageVO.type} =='t'">Title</option>
                     <option value='c' th:selected="${pageVO.type} =='c'">Content</option>
                     <option value='w' th:selected="${pageVO.type} =='w'">Writer</option>
                 </select>
-                <input type='text' id='searchKeyword' th:value="${pageVO.keyword}">
+                <label for='searchKeyword'>
+                    <input type='text' id='searchKeyword' th:value="${pageVO.keyword}">
+                </label>
                 <button id='searchBtn'>Search</button>
             </div>
         </div>
@@ -66,8 +73,8 @@
         <form id='f1' th:action="@{list}" method="get">
             <input type='hidden' name='page' th:value="${result.currentPageNum}">
             <input type='hidden' name='size' th:value="${result.currentPage.pageSize}">
-            <input type='hidden' name='type' th:value=${pageVO.type}>
-            <input type='hidden' name='keyword' th:value=${pageVO.keyword}>
+            <input type='hidden' name='type' th:value="${pageVO.type}">
+            <input type='hidden' name='keyword' th:value="${pageVO.keyword}">
         </form>
     </div>
 
@@ -91,7 +98,7 @@
         });
 
         $(document).ready(function () {
-            var formObj = $("#f1");
+            let formObj = $("#f1");
 
             $(".pagination a").click(function (e) {
 
@@ -102,25 +109,25 @@
                 formObj.submit();
             });
 
-            $(".boardLink").click(function(e){
+            $(".boardLink").click(function (e) {
 
                 e.preventDefault();
 
                 var boardNo = $(this).attr("href");
 
-                formObj.attr("action",[[@{'/boards/view'}]]);
-                formObj.append("<input type='hidden' name='bno' value='" + boardNo +"'>" );
+                formObj.attr("action", [[@{'/boards/view'}]]);
+                formObj.append("<input type='hidden' name='bno' value='" + boardNo + "'>");
 
                 formObj.submit();
 
             });
 
-            $("#searchBtn").click(function(e){
+            $("#searchBtn").click(function (e) {
 
                 var typeStr = $("#searchType").find(":selected").val();
                 var keywordStr = $("#searchKeyword").val();
 
-                console.log(typeStr, "" , keywordStr);
+                console.log(typeStr, "", keywordStr);
 
                 formObj.find("[name='type']").val(typeStr);
                 formObj.find("[name='keyword']").val(keywordStr);
