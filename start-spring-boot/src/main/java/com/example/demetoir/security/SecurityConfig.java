@@ -27,13 +27,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     log.info("security config ..... ");
+    
     http.authorizeRequests()
         .antMatchers("/boards/list")
         .permitAll()
         .antMatchers("/boards/register")
         .hasAnyRole("BASIC", "MANAGER", "ADMIN");
 
-    http.formLogin().loginPage("/login").successHandler(new LoginSuccessHandler());
+    http.formLogin().loginPage("/login");
 
     http.exceptionHandling().accessDeniedPage("/accessDenied");
 
