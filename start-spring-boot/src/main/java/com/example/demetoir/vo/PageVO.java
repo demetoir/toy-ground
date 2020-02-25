@@ -16,13 +16,9 @@ public class PageVO {
   private int page;
   private int size;
 
-  @Setter
-  @Getter
-  private String keyword;
+  @Setter @Getter private String keyword;
 
-  @Getter
-  @Setter
-  private String type;
+  @Getter @Setter private String type;
 
   public PageVO() {
     this.page = 1;

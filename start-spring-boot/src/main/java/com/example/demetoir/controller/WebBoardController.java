@@ -33,7 +33,7 @@ public class WebBoardController {
 
   @GetMapping("/boards/list")
   public void list(@ModelAttribute("pageVO") PageVO pageVO, Model model) {
-    log.info("pagevo " +pageVO);
+    log.info("pagevo " + pageVO);
     Pageable page = pageVO.makePageable(0, "bno");
     log.info("page " + page);
     log.info("page " + page);
