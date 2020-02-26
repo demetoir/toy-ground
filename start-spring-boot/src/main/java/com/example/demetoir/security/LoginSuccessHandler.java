@@ -14,6 +14,7 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
     log.info("---------------- determine target url ------------------");
 
     Object dest = request.getSession().getAttribute("dest");
+    log.info((String) dest);
     String nextUrl;
 
     if (dest != null) {
@@ -24,7 +25,7 @@ public class LoginSuccessHandler extends SavedRequestAwareAuthenticationSuccessH
       nextUrl = super.determineTargetUrl(request, response);
     }
 
-    log.info("-----------------" + nextUrl + "------------------");
+    log.info("----------------- " + nextUrl + " ------------------");
     return nextUrl;
   }
 }

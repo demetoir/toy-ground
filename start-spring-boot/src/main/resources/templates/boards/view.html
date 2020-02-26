@@ -137,7 +137,8 @@
 
                 if(uid == null){
                     if(confirm("로그인 할까요?")){
-                        self.location = [[@{/login}]];
+                        self.location = [[@{/login}]] + "?dest=" + encodeURIComponent(self.location);
+                            console.log(self.location)
                     }
                         return;
                     }
