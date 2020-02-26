@@ -1,10 +1,9 @@
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{/layout/layout1}">
 
 <div layout:fragment="content">
-
+    <form th:action="${'/login'}"></form>
     <div class="panel-heading">View Page</div>
     <div class="panel-body">
 
@@ -94,7 +93,7 @@
                     <input type="text" class="form-control" name='replyText'>
 
                     <label>Replyer</label>
-                    <input type="text" class="form-control" name='replyWriter'>
+                    <input type="text" class="form-control" name='replyWriter' readonly>
                 </div>
                 <div class="modal-footer">
                     <button id='delModalBtn' class="btn btn-danger">Delete</button>
@@ -123,23 +122,36 @@
 
             var replyTextObj = $("input[name='replyText']");
             var replyWriterObj = $("input[name='replyWriter']");
-
-
             var rno;
 
-            $("#addReplyBtn").on('click', function () {
+            var uid = [[${#authentication.principal} eq 'anonymousUser' ? null :${#authentication.principal.member.uid}]];
 
-                $("#myModal").modal("show");
-                $(".modal-title").text("Add Reply");
 
-                $("#delModalBtn").hide();
+            var csrf = JSON.parse('[[${_csrf}]]');
 
-                mode = "ADD";
-            });
+
+            $("#addReplyBtn").on('click', function(){
+
+                if(uid == null){
+                    if(confirm("로그인 할까요?")){
+                        self.location = [[@{/login}]];
+                    }
+                        return;
+                    }
+
+                    replyWriterObj.val(uid);
+
+                    $("#myModal").modal("show");
+                    $(".modal-title").text("Add Reply");
+
+                    $("#delModalBtn").hide();
+
+                    mode= "ADD";
+                });
 
             $("#delModalBtn").on("click", function () {
 
-                var obj = {bno: bno, rno: rno};
+                var obj = {bno: bno, rno: rno, csrf:csrf};
 
                 replyManager.remove(obj, function (list) {
 
@@ -162,9 +174,14 @@
                 replyTextObj.val(tds[1].innerHTML);
                 replyWriterObj.val(tds[2].innerHTML);
                 $("#delModalBtn").show();
+                $("#modalBtn").show();
                 $("#myModal").modal("show");
                 $(".modal-title").text("Modiy/Delete Reply");
 
+                if(uid != tds[2].innerHTML.trim()){
+                    $("#delModalBtn").hide();
+                    $("#modalBtn").hide();
+                }
             });
 
             function afterAll(list) {
@@ -182,7 +199,7 @@
 
                 if (mode == 'ADD') {
 
-                    var obj = {replyText: replyText, replyWriter: replyWriter, bno: bno};
+                    var obj = {replyText: replyText, replyWriter: replyWriter, bno: bno, csrf:csrf};
 
                     //console.log(obj);
 
@@ -191,9 +208,9 @@
                         afterAll(list);
                     });
 
-                } else if (mode = 'MOD') {
+                } else if (mode == 'MOD') {
 
-                    var obj = {replyText: replyText, bno: bno, rno: rno};
+                    var obj = {replyText: replyText, bno: bno, rno: rno, csrf:csrf};
 
 
                     replyManager.update(obj, function (list) {

@@ -7,6 +7,7 @@ import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +22,7 @@ public class WebReplyController {
 
   // todo refactoring make some reply service
   // todo rest URL 형식이 적절하지 않은것 같다
+  @Secured(value = {"ROLE_BASIC", "ROLE_MANAGER", "ROLE_ADMIN"})
   @Transactional
   @PostMapping("/{bno}")
   public ResponseEntity<List<WebReply>> post(
@@ -38,6 +40,7 @@ public class WebReplyController {
     return new ResponseEntity<>(getListByBoard(board), HttpStatus.CREATED);
   }
 
+  @Secured(value = {"ROLE_BASIC", "ROLE_MANAGER", "ROLE_ADMIN"})
   @Transactional
   @DeleteMapping("/{bno}/{rno}")
   public ResponseEntity<List<WebReply>> delete(
@@ -52,6 +55,7 @@ public class WebReplyController {
     return new ResponseEntity<>(getListByBoard(board), HttpStatus.OK);
   }
 
+  @Secured(value = {"ROLE_BASIC", "ROLE_MANAGER", "ROLE_ADMIN"})
   @Transactional
   @PutMapping("/{bno}")
   public ResponseEntity<List<WebReply>> put(
