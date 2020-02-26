@@ -8,11 +8,10 @@ import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 // The job of @Controller is to create a Map of model object and find a view but @RestController
@@ -67,6 +66,7 @@ public class WebBoardController {
     repo.findById(bno).ifPresent(webBoard -> model.addAttribute("vo", webBoard));
   }
 
+  @Secured(value = {"ROLE_BASIC", "ROLE_MANAGER", "ROLE_ADMIN"})
   @GetMapping("/boards/modify")
   public void modifyGET(long bno, @ModelAttribute("pageVO") PageVO pageVO, Model model) {
     log.info("modify bno " + bno);
@@ -74,6 +74,7 @@ public class WebBoardController {
     repo.findById(bno).ifPresent(webBoard -> model.addAttribute("vo", webBoard));
   }
 
+  @Secured(value = {"ROLE_BASIC", "ROLE_MANAGER", "ROLE_ADMIN"})
   @PostMapping("/boards/modify")
   public String modifyPost(WebBoard board, PageVO pageVO, RedirectAttributes rttr) {
     log.info("modify bn " + board.getBno());
@@ -90,9 +91,16 @@ public class WebBoardController {
               rttr.addAttribute("bno", origin.getBno());
             });
 
+    // 페이징과 검색했던 결과로 이동하는 경우
+    rttr.addAttribute("page", pageVO.getPage());
+    rttr.addAttribute("size", pageVO.getSize());
+    rttr.addAttribute("type", pageVO.getType());
+    rttr.addAttribute("keyword", pageVO.getKeyword());
+
     return "redirect:/boards/view";
   }
 
+  @Secured(value = {"ROLE_BASIC", "ROLE_MANAGER", "ROLE_ADMIN"})
   @PostMapping("/boards/delete")
   public String delete(long bno, PageVO pageVO, RedirectAttributes rttr) {
 

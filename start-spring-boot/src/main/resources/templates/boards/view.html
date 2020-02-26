@@ -1,4 +1,5 @@
 <html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{/layout/layout1}">
 
@@ -36,8 +37,10 @@
                                           readonly="readonly"/>
         </div>
 
-        <div class="pull-right">
+        <div class="pull-right"
+             th:with="uid=${#authentication.principal} eq 'anonymousUser' ? 'Guest' : ${#authentication.principal.member.uid}">
             <a
+                    th:if="${uid} eq ${vo.writer}"
                     th:href="@{ modify(page=${pageVO.page},
 			                size=${pageVO.size},
 			                type=${pageVO.type},
@@ -120,6 +123,7 @@
 
             var replyTextObj = $("input[name='replyText']");
             var replyWriterObj = $("input[name='replyWriter']");
+
 
             var rno;
 
