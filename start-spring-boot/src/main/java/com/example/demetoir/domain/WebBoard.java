@@ -1,9 +1,6 @@
 package com.example.demetoir.domain;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -16,6 +13,7 @@ import java.util.List;
 @Entity
 @Table(name = "tbl_webboards")
 @EqualsAndHashCode(of = "bno")
+@NoArgsConstructor
 @ToString
 public class WebBoard {
 
@@ -35,4 +33,17 @@ public class WebBoard {
 
   @OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
   private List<WebReply> replyList;
+
+  @Builder
+  public WebBoard(Long bno, String title, String writer, String content) {
+    this.bno = bno;
+    this.writer = writer;
+    this.title = title;
+    this.content = content;
+  }
+
+  public void update(String title, String content){
+    this.title = title;
+    this.content = content;
+  }
 }
