@@ -1,7 +1,9 @@
 package com.example.demetoir.controller;
 
 import com.example.demetoir.domain.WebBoard;
+import com.example.demetoir.dto.WebBoardDTO;
 import com.example.demetoir.persistance.CustomCrudRepository;
+import com.example.demetoir.service.WebBoardService;
 import com.example.demetoir.vo.PageMaker;
 import com.example.demetoir.vo.PageVO;
 import lombok.extern.java.Log;
@@ -11,7 +13,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 // The job of @Controller is to create a Map of model object and find a view but @RestController
@@ -24,6 +28,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class WebBoardController {
 
   private CustomCrudRepository repo;
+  @Autowired private WebBoardService webBoardService;
 
   @Autowired
   public WebBoardController(CustomCrudRepository repo) {
@@ -34,7 +39,6 @@ public class WebBoardController {
   public void list(@ModelAttribute("pageVO") PageVO pageVO, Model model) {
     log.info("pagevo " + pageVO);
     Pageable page = pageVO.makePageable(0, "bno");
-    log.info("page " + page);
     log.info("page " + page);
 
     Page<Object[]> result = repo.getCustomPage(pageVO.getType(), pageVO.getKeyword(), page);
@@ -51,11 +55,14 @@ public class WebBoardController {
   }
 
   @PostMapping("/boards/register")
-  public String registerPOST(@ModelAttribute("vo") WebBoard vo, RedirectAttributes rttr) {
+  public String registerPOST(@ModelAttribute("vo") WebBoardDTO dto, RedirectAttributes rttr) {
     log.info("register post");
-    log.info("" + vo);
-    repo.save(vo);
+    log.info("" + dto);
+
+    webBoardService.save(dto);
+
     rttr.addFlashAttribute("msg", "success");
+
     return "redirect:/boards/list";
   }
 
@@ -63,7 +70,9 @@ public class WebBoardController {
   public void view(long bno, @ModelAttribute("pageVO") PageVO pageVO, Model model) {
     log.info("bno " + bno);
 
-    repo.findById(bno).ifPresent(webBoard -> model.addAttribute("vo", webBoard));
+    WebBoardDTO dto = webBoardService.findById(bno);
+
+    model.addAttribute("vo", dto);
   }
 
   @Secured(value = {"ROLE_BASIC", "ROLE_MANAGER", "ROLE_ADMIN"})
@@ -71,25 +80,20 @@ public class WebBoardController {
   public void modifyGET(long bno, @ModelAttribute("pageVO") PageVO pageVO, Model model) {
     log.info("modify bno " + bno);
 
-    repo.findById(bno).ifPresent(webBoard -> model.addAttribute("vo", webBoard));
+    WebBoardDTO dto = webBoardService.findById(bno);
+
+    model.addAttribute("vo", dto);
   }
 
   @Secured(value = {"ROLE_BASIC", "ROLE_MANAGER", "ROLE_ADMIN"})
   @PostMapping("/boards/modify")
-  public String modifyPost(WebBoard board, PageVO pageVO, RedirectAttributes rttr) {
-    log.info("modify bn " + board.getBno());
+  public String modifyPost(WebBoardDTO dto, PageVO pageVO, RedirectAttributes rttr) {
+    log.info("modify bn " + dto.getBno());
 
-    repo.findById(board.getBno())
-        .ifPresent(
-            origin -> {
-              origin.setTitle(board.getTitle());
-              origin.setContent(board.getContent());
+    webBoardService.updateById(dto.getBno(), dto);
 
-              repo.save(origin);
-
-              rttr.addFlashAttribute("msg", "success");
-              rttr.addAttribute("bno", origin.getBno());
-            });
+    rttr.addFlashAttribute("msg", "success");
+    rttr.addAttribute("bno", dto.getBno());
 
     // 페이징과 검색했던 결과로 이동하는 경우
     rttr.addAttribute("page", pageVO.getPage());
@@ -105,9 +109,10 @@ public class WebBoardController {
   public String delete(long bno, PageVO pageVO, RedirectAttributes rttr) {
 
     log.info("delete bno " + bno);
-    repo.deleteById(bno);
+    webBoardService.deleteById(bno);
 
     rttr.addFlashAttribute("msg", "success");
+
     rttr.addAttribute("page", pageVO.getPage());
     rttr.addAttribute("size", pageVO.getSize());
     rttr.addAttribute("type", pageVO.getType());
