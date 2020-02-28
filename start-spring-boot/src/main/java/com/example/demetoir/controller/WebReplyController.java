@@ -1,14 +1,13 @@
 package com.example.demetoir.controller;
 
-import com.example.demetoir.domain.WebBoard;
-import com.example.demetoir.domain.WebReply;
-import com.example.demetoir.persistance.WebReplyRepository;
+import com.example.demetoir.dto.WebBoardDTO;
+import com.example.demetoir.dto.WebReplyDTO;
+import com.example.demetoir.service.WebBoardService;
+import com.example.demetoir.service.WebReplyService;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,79 +17,57 @@ import java.util.List;
 @RequestMapping("/replies/*")
 public class WebReplyController {
 
-  @Autowired private WebReplyRepository webReplyRepository;
+  private final WebReplyService webReplyService;
+  private final WebBoardService webBoardService;
+
+  public WebReplyController(WebReplyService webReplyService, WebBoardService webBoardService) {
+    this.webReplyService = webReplyService;
+    this.webBoardService = webBoardService;
+  }
 
   // todo refactoring make some reply service
   // todo rest URL 형식이 적절하지 않은것 같다
   @Secured(value = {"ROLE_BASIC", "ROLE_MANAGER", "ROLE_ADMIN"})
-  @Transactional
   @PostMapping("/{bno}")
-  public ResponseEntity<List<WebReply>> post(
-      @PathVariable("bno") Long bno, @RequestBody WebReply webReply) {
-    log.info("create reply");
-    log.info("bno " + bno);
-    log.info("reply " + webReply);
+  public ResponseEntity<List<WebReplyDTO>> post(
+      @PathVariable("bno") Long bno, @RequestBody WebReplyDTO replyDTO) {
+    log.info(bno + " bno create reply " + replyDTO);
 
-    WebBoard board = new WebBoard();
-    board.setBno(bno);
+    webReplyService.create(bno, replyDTO);
 
-    webReply.setBoard(board);
-    webReplyRepository.save(webReply);
-
-    return new ResponseEntity<>(getListByBoard(board), HttpStatus.CREATED);
+    return new ResponseEntity<>(webReplyService.findAllByBoardId(bno), HttpStatus.CREATED);
   }
 
   @Secured(value = {"ROLE_BASIC", "ROLE_MANAGER", "ROLE_ADMIN"})
-  @Transactional
   @DeleteMapping("/{bno}/{rno}")
-  public ResponseEntity<List<WebReply>> delete(
+  public ResponseEntity<List<WebReplyDTO>> delete(
       @PathVariable("bno") Long bno, @PathVariable("rno") Long rno) {
 
     log.info("delete reply " + rno);
 
-    webReplyRepository.deleteById(rno);
-    WebBoard board = new WebBoard();
-    board.setBno(bno);
+    webReplyService.deleteById(rno);
 
-    return new ResponseEntity<>(getListByBoard(board), HttpStatus.OK);
+    return new ResponseEntity<>(webReplyService.findAllByBoardId(bno), HttpStatus.OK);
   }
 
   @Secured(value = {"ROLE_BASIC", "ROLE_MANAGER", "ROLE_ADMIN"})
-  @Transactional
   @PutMapping("/{bno}")
-  public ResponseEntity<List<WebReply>> put(
-      @PathVariable("bno") Long bno, @RequestBody WebReply webReply) {
-    log.info("update reply " + bno);
+  public ResponseEntity<List<WebReplyDTO>> put(
+      @PathVariable("bno") Long bno, @RequestBody WebReplyDTO webReply) {
+    log.info("update reply " + webReply.getRno());
 
-    webReplyRepository
-        .findById(webReply.getRno())
-        .ifPresent(
-            origin -> {
-              origin.setReplyText(webReply.getReplyText());
+    webReplyService.updateById(webReply.getRno(), webReply);
 
-              webReplyRepository.save(origin);
-            });
-
-    WebBoard board = new WebBoard();
-    board.setBno(bno);
-
-    return new ResponseEntity<>(getListByBoard(board), HttpStatus.CREATED);
+    return new ResponseEntity<>(webReplyService.findAllByBoardId(bno), HttpStatus.OK);
   }
 
   @GetMapping("/{bno}")
-  public ResponseEntity<List<WebReply>> getReplies(@PathVariable("bno") Long bno) {
+  public ResponseEntity<List<WebReplyDTO>> getReplies(@PathVariable("bno") Long bno) {
 
-    log.info("get replies + " + bno);
+    WebBoardDTO dto = webBoardService.findById(bno);
 
-    WebBoard board = new WebBoard();
-    board.setBno(bno);
+    log.info("get replies of " + bno + " " + dto.getReplyList());
 
-    return new ResponseEntity<>(getListByBoard(board), HttpStatus.OK);
-  }
-
-  private List<WebReply> getListByBoard(WebBoard board) {
-    log.info("get list of board " + board);
-
-    return webReplyRepository.getWebRepliesOfBoard(board);
+    return new ResponseEntity<>(webReplyService.findAllByBoardId(bno), HttpStatus.OK);
   }
 }

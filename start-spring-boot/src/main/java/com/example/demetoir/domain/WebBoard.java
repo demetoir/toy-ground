@@ -6,6 +6,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -31,8 +32,8 @@ public class WebBoard {
 
   @UpdateTimestamp private Timestamp updatedDate;
 
-  @OneToMany(mappedBy = "board", fetch = FetchType.LAZY)
-  private List<WebReply> replyList;
+  @OneToMany(mappedBy = "board", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  private List<WebReply> replyList = new ArrayList<>();
 
   @Builder
   public WebBoard(Long bno, String title, String writer, String content) {
@@ -42,7 +43,7 @@ public class WebBoard {
     this.content = content;
   }
 
-  public void update(String title, String content){
+  public void update(String title, String content) {
     this.title = title;
     this.content = content;
   }

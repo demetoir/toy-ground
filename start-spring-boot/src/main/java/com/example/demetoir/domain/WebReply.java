@@ -1,10 +1,7 @@
 package com.example.demetoir.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -16,6 +13,7 @@ import java.sql.Timestamp;
 @Setter
 @Table(name = "tbl_webreplies")
 @EqualsAndHashCode(of = "rno")
+@NoArgsConstructor
 @Entity
 public class WebReply {
   @Id
@@ -33,4 +31,16 @@ public class WebReply {
   @ManyToOne(fetch = FetchType.LAZY)
   @JsonIgnore
   private WebBoard board;
+
+  @Builder
+  public WebReply(Long rno, String replyText, String replyWriter, WebBoard webBoard) {
+    this.rno = rno;
+    this.replyText = replyText;
+    this.replyWriter = replyWriter;
+    this.board = webBoard;
+  }
+
+  public void update(String replyText) {
+    this.replyText = replyText;
+  }
 }
