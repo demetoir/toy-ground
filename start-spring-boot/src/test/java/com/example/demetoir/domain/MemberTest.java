@@ -10,9 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 
 @RunWith(SpringRunner.class)
@@ -26,12 +24,12 @@ public class MemberTest {
   @Autowired private PasswordEncoder passwordEncoder;
 
   @Test
-  public void testInsert() {
+  public void insertDummyMember() {
     for (int i = 0; i < 100; i++) {
       Member member = new Member();
 
       member.setUid("user" + i);
-      member.setUpw("pw" + i);
+      member.setUpw(passwordEncoder.encode("pw" + i));
       member.setUname("user" + i);
 
       MemberRole role = new MemberRole();
@@ -49,24 +47,7 @@ public class MemberTest {
   }
 
   @Test
-  public void testUpdateOldMember() {
-    List<String> ids = new ArrayList<>();
-
-    for (int i = 0; i < 100; i++) {
-      ids.add("user" + i);
-    }
-
-    memberRepository
-        .findAllById(ids)
-        .forEach(
-            member -> {
-              member.setUpw(passwordEncoder.encode(member.getUpw()));
-              memberRepository.save(member);
-            });
-  }
-
-  @Test
-  public void testRead() {
+  public void findMemberById() {
     Optional<Member> result = memberRepository.findById("user43");
 
     result.ifPresent(member -> log.info("member " + member));
