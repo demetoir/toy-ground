@@ -34,7 +34,7 @@ public class WebReplyService {
             .orElseThrow(
                 () -> new IllegalArgumentException("board of bno :" + bno + " can not find"));
 
-    board.getReplyList().add(reply);
+    board.addReply(reply);
     reply.setBoard(board);
 
     return webReplyRepository.save(reply).getRno();
@@ -59,11 +59,10 @@ public class WebReplyService {
         webReplyRepository
             .findById(id)
             .orElseThrow(() -> new IllegalArgumentException("id " + id + " dose not exist"));
+    webReplyRepository.deleteById(id);
 
     WebBoard board = webReply.getBoard();
-    board.getReplyList().remove(webReply);
-
-    webReplyRepository.deleteById(id);
+    board.removeReply(webReply);
 
     return id;
   }
