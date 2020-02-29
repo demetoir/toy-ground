@@ -15,7 +15,7 @@ import java.util.List;
 @Table(name = "tbl_webboards")
 @EqualsAndHashCode(of = "bno")
 @NoArgsConstructor
-@ToString
+@ToString(exclude = "replyList")
 public class WebBoard {
 
   @Id
@@ -46,5 +46,13 @@ public class WebBoard {
   public void update(String title, String content) {
     this.title = title;
     this.content = content;
+  }
+
+  public void addReply(WebReply webReply) {
+    this.replyList.add(webReply);
+  }
+
+  public void removeReply(WebReply webReply){
+    this.replyList.remove(webReply);
   }
 }
