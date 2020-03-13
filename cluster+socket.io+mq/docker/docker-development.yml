@@ -1,0 +1,68 @@
+version: "3.5"
+
+services:
+    redis:
+        container_name: ${REDIS_DEV_CONTAINER_NAME}
+        image: redis
+        ports:
+            - ${REDIS_DEV_PORT}:6379
+        volumes:
+            - ${DOCKER_VOLUMNS_PATH}/${REDIS_DEV_CONTAINER_NAME}:/data
+        networks:
+            - backend
+
+    nginx:
+        container_name: nginx
+        image: nginx
+        ports:
+            - 8080:80
+        volumes:
+            - ../nginx.conf:/etc/nginx/conf.d/default.conf
+        networks:
+            - backend
+
+    socket_io1:
+        container_name: socket_io1
+        build:
+            context: ../
+            dockerfile: ./docker/dockerfiles/node.Dockerfile
+
+#        command: yarn pm2 start ./socket_io_server/pm2-entry.js
+        command: yarn node:babel ./socket_io_server/pm2-entry.js
+        environment:
+            - NODE_ENV=production
+            # container 내부에서 DB container 를 접근하기위해 필요한 환경변수
+            - IS_DOCKER_CONTAINER=true
+            - CONTAINER_ID=1
+        volumes:
+            - ../:/usr/src/app/
+        tty: true
+        ports:
+            - 4001:4001
+        networks:
+            - backend
+
+    socket_io2:
+        container_name: socket_io2
+        build:
+            context: ../
+            dockerfile: ./docker/dockerfiles/node.Dockerfile
+
+        #        command: yarn pm2 start ./socket_io_server/pm2-entry.js
+        command: yarn node:babel ./socket_io_server/pm2-entry.js
+        environment:
+            - NODE_ENV=production
+            # container 내부에서 DB container 를 접근하기위해 필요한 환경변수
+            - IS_DOCKER_CONTAINER=true
+            - CONTAINER_ID=2
+        volumes:
+            - ../:/usr/src/app/
+        tty: true
+        ports:
+            - 4002:4001
+        networks:
+            - backend
+
+networks:
+    backend:
+        driver: "bridge"
