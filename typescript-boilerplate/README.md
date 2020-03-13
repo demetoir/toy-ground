@@ -14,6 +14,10 @@ base on
 [*] able to run start
 [*] able to prettier
 [*] able to run test
+[ ] able to run test watch
+[ ] able to build
+[ ] logging module
+[ ] docker
 
 [ ] able to run build
 
