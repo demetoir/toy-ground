@@ -1,6 +1,9 @@
 require('dotenv').config()
 
+const {v1: uuid} = require('uuid')
 const env = process.env
+const axios = require('axios')
+
 
 const express = require('express')
 
@@ -15,30 +18,60 @@ const s3 = new AWS.S3({
 
 const bucketName = env.Bucket
 
-const params = {
-
-    Bucket: bucketName,
-    Key: '/example.text',
-    Expires: 14 * 24 * 3600
-};
 
 const body = Buffer.from("1234124")
 
-s3.putObject({Bucket: bucketName, Key: 'example.txt', Body: body}, (err, data) => {
+
+async function serverSide(){
+
+}
 
 
-    console.log(err, data)
+async function clientSide(){
+
+}
+
+async function start() {
+    try {
+
+        const key = `example-${uuid()}.text`
+        const contentType = "text/plain"
+
+        const params = {
+            Bucket: bucketName,
+            Key: key,
+            Expires: 3600,
+            ContentType: contentType,
+            ACL: 'public-read',
+        };
+        const signedUrlPut = s3.getSignedUrl('putObject', params);
 
 
-})
-const signedUrlPut = s3.getSignedUrl('putObject', params);
+        const buffer = Buffer.from("abcdefg,hijklmnop, qrs, tuv, double-u, x, y and z")
 
-const signedUrlRead = s3.getSignedUrl('getObject', params);
+        console.log(signedUrlPut)
+        const url = signedUrlPut.split("?")[0]
+
+        await axios.put(url, buffer, {
+            headers: {
+                "Content-Type": "text/plain"
+            }
+        });
+
+        console.log('here')
+    } catch (e) {
+        const {response} = e
+        if (response.data) {
+            console.log(response.data)
+
+        }
+    }
 
 
-console.log(signedUrlPut)
-console.log(signedUrlRead)
+}
 
+
+start();
 
 // const AWS = require('aws-sdk');
 // const fs = require('fs');
