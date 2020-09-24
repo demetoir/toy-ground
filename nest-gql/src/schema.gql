@@ -6,8 +6,27 @@ type Author {
   firstName: String
   id: Int!
   lastName: String
+  posts: [Post!]!
+}
+
+type Mutation {
+  shitPost(postId: Int!): Post!
+}
+
+type Post {
+  author: Author!
+  id: Int!
+  shit: Shit!
+  title: String!
+  votes: Int
 }
 
 type Query {
   getAuthor(id: Int!): Author!
+  getShit(id: Int!): Shit!
+}
+
+type Shit {
+  id: Int!
+  post: Post!
 }

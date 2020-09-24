@@ -27,7 +27,7 @@ describe('author resolver', () => {
 
     it('should get author', async () => {
         const id = 3
-        const author = await authorsResolver.author(id)
+        const author = await authorsResolver.getAuthor(id, {})
         expect(author).toBeDefined()
     })
 });
