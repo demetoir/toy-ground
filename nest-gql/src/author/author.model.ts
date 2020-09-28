@@ -1,5 +1,6 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Post } from '../post/post.model';
+import { PriceScalar } from '../common/scalars/price/price.scalar';
 
 @ObjectType()
 export class Author {
@@ -14,6 +15,9 @@ export class Author {
 
   @Field({ nullable: false })
   createdAt: Date;
+
+  @Field(type => PriceScalar, { nullable: true })
+  price: number;
 
   @Field(type => [Post])
   posts: Post[];

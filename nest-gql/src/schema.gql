@@ -8,13 +8,14 @@ type Author {
   id: Int!
   lastName: String
   posts: [Post!]!
+  price: Price
 }
 
 """Date custom scalar type"""
 scalar Date
 
 type Mutation {
-  updateAuthor(id: Int!): Author!
+  updateAuthor(createAt: Date!, id: Int!): Author!
   upvotePost(postId: Int!): Post!
 }
 
@@ -25,6 +26,9 @@ type Post {
   title: String!
   votes: Int
 }
+
+"""price"""
+scalar Price
 
 type Query {
   getAuthor(id: Int!): Author!

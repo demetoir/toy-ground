@@ -38,9 +38,11 @@ export class AuthorsResolver {
   @Mutation(returns => Author, { name: 'updateAuthor' })
   async updateAuthor(
     @Args('id', { type: () => Int }) id: number,
-    // @Args('price', { type: () => PriceScalar, name: 'price' }) price: number,
+    @Args('createAt', { type: () => Date, name: 'createdAt' }) createdAt: Date,
   ) {
     // console.log(price);
+    console.log(typeof createdAt)
+    console.log(createdAt)
     const author: Author = AuthorFactory.build();
 
     return author;
