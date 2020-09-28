@@ -1,6 +1,6 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Author } from './author.model';
-import { Shit } from './shit.model';
+import { Author } from '../author/author.model';
+import { Shit } from '../shit/shit.model';
 
 @ObjectType()
 export class Post {

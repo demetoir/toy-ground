@@ -8,10 +8,10 @@ import {
   Resolver,
 } from '@nestjs/graphql';
 import { Author } from './author.model';
-import { Post } from './post.model';
-import { Shit } from './shit.model';
 
 import { parse } from 'graphql';
+import { Shit } from '../shit/shit.model';
+import { Post } from '../post/post.model';
 
 async function getShit(post) {
   const shit = new Shit();
