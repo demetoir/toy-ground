@@ -4,9 +4,11 @@ import { join } from 'path';
 import { AuthorModule } from './author/author.module';
 import { ShitModule } from './shit/shit.module';
 import { PostModule } from './post/post.module';
+import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [
+    CommonModule,
     AuthorModule,
     ShitModule,
     PostModule,

@@ -3,14 +3,19 @@
 # ------------------------------------------------------
 
 type Author {
+  createdAt: Date!
   firstName: String
   id: Int!
   lastName: String
   posts: [Post!]!
 }
 
+"""Date custom scalar type"""
+scalar Date
+
 type Mutation {
-  shitPost(postId: Int!): Post!
+  updateAuthor(id: Int!): Author!
+  upvotePost(postId: Int!): Post!
 }
 
 type Post {
