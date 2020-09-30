@@ -59,6 +59,7 @@ export class AuthorsResolver {
 
   @Query(returns => [Author], { name: 'getAuthorByType' })
   async getAuthorsByType(
+    // enum을 args로 받는경우 선언된 enum type 그대로 사용한다
     @Args('type', { type: () => AuthorTypeEnum }) type: AuthorTypeEnum,
   ) {
     console.log(type);

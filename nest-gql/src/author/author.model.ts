@@ -23,6 +23,7 @@ export class Author {
   @Field(type => [Post])
   posts: Post[];
 
+  // enum type 사용시 선언된 enum type을 그대로 사용하면된다
   @Field(type => AuthorTypeEnum)
   type: AuthorTypeEnum;
 }
