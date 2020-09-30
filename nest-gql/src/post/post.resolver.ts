@@ -3,6 +3,7 @@ import {
   Int,
   Mutation,
   Parent,
+  Query,
   ResolveField,
   Resolver,
 } from '@nestjs/graphql';
@@ -12,6 +13,7 @@ import { PostFactory } from './post.factory';
 import { Shit } from '../shit/shit.model';
 import { ShitFactory } from '../shit/shit.factory';
 import { AuthorFactory } from '../author/author.factory';
+import { GetPostByInput } from './getPostBy.input';
 
 @Resolver(of => Post)
 export class PostResolver {
@@ -22,6 +24,17 @@ export class PostResolver {
     return post;
   }
 
+  @Query(returns => [Post], { name: 'getPostBy' })
+  async getPostBy(
+    @Args({ name: 'getPostByInput', type: () => GetPostByInput })
+    getPostByInput: GetPostByInput,
+  ): Promise<Post[]> {
+    console.log(getPostByInput);
+
+    const post = PostFactory.build();
+
+    return [post];
+  }
 
   @ResolveField(returns => Author, { name: 'author' })
   async author(@Parent() post: Post) {

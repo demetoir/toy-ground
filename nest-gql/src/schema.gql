@@ -12,6 +12,7 @@ type Author {
   type: AuthorType!
 }
 
+"""this is description"""
 enum AuthorType {
   FREE
   SHIT
@@ -19,6 +20,11 @@ enum AuthorType {
 
 """Date custom scalar type"""
 scalar Date
+
+input GetPostByInput {
+  title: String!
+  votes: Int
+}
 
 type Mutation {
   updateAuthor(createAt: Date!, id: Int!): Author!
@@ -39,6 +45,7 @@ scalar Price
 type Query {
   getAuthor(id: Int!): Author!
   getAuthorByType(type: AuthorType!): [Author!]!
+  getPostBy(getPostByInput: GetPostByInput!): [Post!]!
   getShit(id: Int!): Shit!
 }
 
