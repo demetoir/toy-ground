@@ -9,6 +9,12 @@ type Author {
   lastName: String
   posts: [Post!]!
   price: Price
+  type: AuthorType!
+}
+
+enum AuthorType {
+  FREE
+  SHIT
 }
 
 """Date custom scalar type"""
@@ -32,6 +38,7 @@ scalar Price
 
 type Query {
   getAuthor(id: Int!): Author!
+  getAuthorByType(type: AuthorType!): [Author!]!
   getShit(id: Int!): Shit!
 }
 

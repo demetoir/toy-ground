@@ -13,8 +13,7 @@ import { Shit } from '../shit/shit.model';
 import { Post } from '../post/post.model';
 import { AuthorFactory } from './author.factory';
 import { PostFactory } from '../post/post.factory';
-import { DateScalar } from '../common/scalars/date/date.scalar';
-import { PriceScalar } from '../common/scalars/price/price.scalar';
+import { AuthorTypeEnum } from './author-type.enum';
 
 async function getShit(post) {
   const shit = new Shit();
@@ -41,8 +40,8 @@ export class AuthorsResolver {
     @Args('createAt', { type: () => Date, name: 'createdAt' }) createdAt: Date,
   ) {
     // console.log(price);
-    console.log(typeof createdAt)
-    console.log(createdAt)
+    console.log(typeof createdAt);
+    console.log(createdAt);
     const author: Author = AuthorFactory.build();
 
     return author;
@@ -56,6 +55,17 @@ export class AuthorsResolver {
     const author: Author = AuthorFactory.build();
 
     return author;
+  }
+
+  @Query(returns => [Author], { name: 'getAuthorByType' })
+  async getAuthorsByType(
+    @Args('type', { type: () => AuthorTypeEnum }) type: AuthorTypeEnum,
+  ) {
+    console.log(type);
+
+    const author: Author = AuthorFactory.build();
+
+    return [author];
   }
 
   // notice Resolver
