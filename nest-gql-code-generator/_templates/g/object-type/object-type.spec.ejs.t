@@ -1,5 +1,5 @@
 ---
-to: src/<%= name %>.object-type.spec.ts
+to: ./<%= h.storage.filePrefix %>.object-type.spec.ts
 ---
 
 spec

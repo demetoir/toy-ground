@@ -1,7 +1,6 @@
 ---
 inject: true
 append: true
-to: src/<%= name %>.constant.ts
+to: ./constant.ts
 ---
-
-const <%= name %> = <%= name %>
+const GRAPHQL_OBJECT_TYPE_<%= h.storage.constantName %> = "<%= h.storage.objectTypeName %>";
