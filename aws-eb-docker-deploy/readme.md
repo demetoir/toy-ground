@@ -1,7 +1,7 @@
 # todo
 
 docker compose 이용 
-nginx 설정 적용
+
 더 좋은 디렉토리 구조
 eb config 분리
 
@@ -83,7 +83,14 @@ FROM node:14-alpine AS BUILD_IMAGE
 이거 쓰면 local에서는 되지만 deploy시에는 터진다
 
 
-디폴트값으로 아무것도 설정하지 않으면 프로젝트 폴더 전체를 번들링해서 업로드다
+디폴트값으로 아무것도 설정하지 않으면 프로젝트 폴더 전체를 번들링해서 업로드한다 
+
+# nginx proxy setting
+
+.platform/nginx/conf.d 디렉토레이 지정하면 돌아가긴한다 
+
+
+https://docs.aws.amazon.com/ko_kr/elasticbeanstalk/latest/dg/platforms-linux-extend.html
 
 # [reference]
 https://jeonghwan-kim.github.io/eb-cli-%ED%88%B4-%EC%82%AC%EC%9A%A9%EB%B2%95-%EC%A0%95%EB%A6%AC/

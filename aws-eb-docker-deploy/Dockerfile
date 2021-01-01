@@ -24,6 +24,6 @@ COPY ./ecosystem.config.js .
 
 RUN npm install
 
-EXPOSE 80
+EXPOSE 3000
 
 CMD pm2-runtime ./ecosystem.config.js

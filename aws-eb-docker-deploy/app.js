@@ -6,6 +6,6 @@ app.use('*', (req, res) => {
     res.send('hello shit world')
 })
 
-app.listen(80, () => {
+app.listen(3000, () => {
     console.log('server listen')
 })
