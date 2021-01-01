@@ -15,12 +15,8 @@ WORKDIR /usr
 # install pm2 as global
 RUN npm install pm2 -g
 
-#
-COPY ./app.js ./app.js
-
-# copy package and etc config
-COPY ./package*.json ./
-COPY ./ecosystem.config.js .
+# copy all to container
+COPY ./build .
 
 RUN npm install
 

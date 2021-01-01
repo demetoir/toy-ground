@@ -1,0 +1,11 @@
+{
+  "name": "app-in-aws-eb-docker-deploy",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "pm2": "^4.5.1"
+  }
+}

@@ -1,0 +1,5 @@
+# bundle directory
+build
+
+# aws eb cli config
+.elasticbeanstalk
