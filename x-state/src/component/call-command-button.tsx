@@ -3,11 +3,12 @@
 
 import { asServerAction, NoneCommand } from "@/server/server-action";
 
-export function Button() {
+export function CallCommandButton(props: { id: string }) {
     const onClick = async () => {
         await asServerAction()
         await NoneCommand()
-        console.log('shit')
+        console.log(`shit ${props.id}`)
+
     }
 
 
