@@ -1,11 +1,16 @@
+import React from "react";
+import { Section } from "@/app/section";
 
-import { Button } from "@/app/button";
 
-export default function Home() {
+export default async function Home() {
+
 
     return (
-        <main className="flex p-24 gap-1">
-            <Button/>
+        <main className={'flex w-40 flex-row justify-between'}>
+
+            <Section/>
+
+
         </main>
     )
 }
